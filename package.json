@@ -1,0 +1,24 @@
+{
+	"name": "my-lib",
+	"description": "It's a...",
+
+	"version": "0.0.1",
+	"author": {
+		"name": "Hey You",
+		"email": "me@example.com"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/here-is/my-lib.git"
+	},
+	"devDependencies": {
+		"grunt": "~0.4.1",
+		"grunt-contrib-uglify": "~0.2.1",
+		"grunt-contrib-jasmine": "~0.4.2"
+	},
+	"engines": {
+		"node": "0.x",
+		"npm": "1.2.x"
+	},
+	"main": "./index"
+}

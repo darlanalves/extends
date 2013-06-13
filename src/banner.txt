@@ -1,0 +1,6 @@
+/**
+* MyLib
+* Author: Here <you-are@example.com>
+* Built on <%= grunt.template.today('yyyy-mm-dd') %>
+*/
+
