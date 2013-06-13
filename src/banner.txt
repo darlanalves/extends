@@ -1,6 +1,5 @@
 /**
-* MyLib
-* Author: Here <you-are@example.com>
-* Built on <%= grunt.template.today('yyyy-mm-dd') %>
-*/
-
+ * extends
+ * Author: Darlan Alves <darlan@moovia.com>
+ * Built on <%= grunt.template.today('yyyy-mm-dd') %>
+ */

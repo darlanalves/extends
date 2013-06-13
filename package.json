@@ -1,15 +1,14 @@
 {
-	"name": "my-lib",
-	"description": "It's a...",
-
+	"name": "extends",
+	"description": "extensible classes - supports super method",
 	"version": "0.0.1",
 	"author": {
-		"name": "Hey You",
-		"email": "me@example.com"
+		"name": "Darlan Alves",
+		"email": "darlan@moovia.com"
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/here-is/my-lib.git"
+		"url": "https://github.com/jimmynewtron/extends.git"
 	},
 	"devDependencies": {
 		"grunt": "~0.4.1",

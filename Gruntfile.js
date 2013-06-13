@@ -2,8 +2,6 @@ module.exports = function(grunt) {
 	var pkg = grunt.file.readJSON('package.json'),
 		libName = pkg.name;
 
-	var sources = ['src/**/*.js'];
-
 	// wrap files
 	var wrap = function(files, dest) {
 		code = grunt.file.read('src/$prefix.js').toString();
@@ -17,7 +15,14 @@ module.exports = function(grunt) {
 	};
 
 	grunt.registerTask('wrap', function() {
-		wrap(sources, 'src/$assembled.js');
+		var done = this.async();
+		grunt.file.glob('src/**/*.js', null, function(err, files) {
+			if (!err) {
+				wrap(files, 'src/$assembled.js');
+			}
+
+			done();
+		});
 	});
 
 	var uglify = {
@@ -38,9 +43,11 @@ module.exports = function(grunt) {
 
 	var jasmine = {
 		latest: {
+			keepRunner: true,
+			outfile: 'test.html',
 			src: 'dist/' + libName + '-latest.js',
 			options: {
-				specs: ["test/**/*Spec.js"]
+				specs: "test/**/*Spec.js"
 			}
 		}
 	};
