@@ -3,9 +3,10 @@
 A method to extend classes in Javascript.
 
 **Features:**
-- super method call (this._super());
+- super method calling `this._super()`
 - static properties
-- 
+- object cloning with `this.clone()`
+
 
 **Examples:**
 
