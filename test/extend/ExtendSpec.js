@@ -49,12 +49,13 @@ describe('Extend - class extension', function() {
 		// creates a instace of our new class
 		var obj1 = new ClonedClass;
 
-		// sets a value to obj1.prop
+		// sets the value of obj1.prop
 		obj1.prop = false;
 
-		// and clones the instance
+		// clones the instance
 		var obj2 = obj1.clone();
 
+		// the cloned object must have the same properties
 		expect(obj2.prop).toBeDefined();
 		expect(obj2.prop).toBe(false);
 	});

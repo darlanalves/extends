@@ -1,1 +1,1 @@
-module.exports = require('./dist/mylib-latest').MyLib;
+module.exports = require('./dist/extends-latest').extend;

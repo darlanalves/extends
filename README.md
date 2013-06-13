@@ -1,22 +1,37 @@
-# Javascript Sample lib
+# Extends
 
-Are you ready to fork and start coding? Good!
+A method to extend classes in Javascript.
 
-### Here's what you need:
+**Features:**
+- super method call (this._super());
+- static properties
+- 
 
-- node 0.8+ (try nvm)
-- [grunt 0.4+](http://gruntjs.com/ "GruntJS")
+**Examples:**
 
-### How to write and publish
-- edit **package.json** (module name, your name/email, git repo...)
-- run `npm install` to download grunt and some plugins
-- write the module source into **/src/.../**
-- edit the file banner in **/src/banner.txt**
-- write some tests into **/test/.../**
-- edit **index.js** (to expose the right things)
-- edit **README.md** as well
-- run `grunt build`
-- run `npm publish`
+```
+var Class = function() {};
 
-Also, check the code in **/src/$suffix.js** to expose your module stuff 
-into exports variable
+var Stuff = extend(Class, {
+	statics: {
+		COLOR_RED: 'red',
+		COLOR_BLUE: 'blue'
+	},
+	
+	setColor: function(color) {
+		this.color = color;
+	}
+});
+
+// extended classes will have a .extend method
+var Ball = Stuff.extend({
+	setColor: function(color) {
+		this._super(color);
+		this.updateBallColor();
+	},
+	updateBallColor: function() {
+		// do something	
+	}
+});
+
+```

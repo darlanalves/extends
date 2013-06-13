@@ -26,7 +26,7 @@ var has = {}.hasOwnProperty,
 	f = 'function';
 
 /**
- * Returns a function used to call superclass' method
+ * Returns a function used to call superclass methods
  *  - saves old this._super value;
  *  - sets this._super as parent fn
  *  - calls the proto.name fn in the proper scope (this)
@@ -52,7 +52,6 @@ function setupSuperMethod(property, superclass, fn) {
 
 /**
  * @method extend
- * @author Darlan Alves <darlan@moovia.com>
  */
 function extend(SuperClass, prototype) {
 	var members, superProto, NewClass, statics = false;

@@ -43,10 +43,10 @@ module.exports = function(grunt) {
 
 	var jasmine = {
 		latest: {
-			keepRunner: true,
-			outfile: 'test.html',
 			src: 'dist/' + libName + '-latest.js',
 			options: {
+				keepRunner: true,
+				outfile: './test.html',
 				specs: "test/**/*Spec.js"
 			}
 		}
