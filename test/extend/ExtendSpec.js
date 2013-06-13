@@ -41,7 +41,7 @@ describe('Extend - class extension', function() {
 		expect(sub.test).not.toThrow();
 	});
 
-	it('should create a clone of some instace', function() {
+	it('should create a clone', function() {
 		var ClonedClass = extend(DummyClass, {
 			prop: true
 		});
