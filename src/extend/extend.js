@@ -128,3 +128,5 @@ function extend(SuperClass, prototype) {
 
 	return NewClass;
 };
+
+exports.extend = extend;
