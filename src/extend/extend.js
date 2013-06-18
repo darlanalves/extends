@@ -53,6 +53,7 @@ function setupSuperMethod(property, superclass, fn) {
 /**
  * @method extend
  */
+
 function extend(SuperClass, prototype) {
 	var members, superProto, NewClass, statics = false;
 
@@ -129,4 +130,21 @@ function extend(SuperClass, prototype) {
 	return NewClass;
 };
 
-exports.extend = extend;
+exports.extend = function(a, b) {
+	var len = arguments.length,
+		result;
+
+	if (len === 1) {
+		if (typeof a === f) {
+			result = extend(a, {});
+		} else {
+			result = extend(function() {}, a);
+		}
+	} else if (len === 2) {
+		result = extend(a, (typeof b === 'object' && b) || {});
+	} else {
+		result = extend(function() {}, {});
+	}
+
+	return result;
+};

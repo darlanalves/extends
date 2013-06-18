@@ -1,6 +1,10 @@
 describe('Extend - class extension', function() {
 	var DummyClass = function() {};
 
+	it("should create an empty class", function() {
+		var Class = extend();
+	});
+
 	it('should extend a class', function() {
 		var A = extend(DummyClass);
 		var B = A.extend(A);
