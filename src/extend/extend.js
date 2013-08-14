@@ -1,6 +1,25 @@
 // References:
 // Super method: 		http://ejohn.org/blog/simple-javascript-inheritance/
 // Prototype setup: 	https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Operators/instanceof
+/**
+ * Adds static properties/methods to new class
+ * @param {Function} newClass
+ * @param {Function} superClass
+ * @param {Object} statics
+ */
+
+function addStatics(newClass, superClass, statics) {
+	copy(newClass, superClass);
+	if (statics) {
+		copy(newClass, statics);
+	}
+}
+
+/**
+ * Shallow copy of object properties
+ * @param {Object} destination
+ * @param {Object} source
+ */
 
 function copy(destination, source) {
 	if (Object.keys) {
@@ -26,14 +45,14 @@ var has = {}.hasOwnProperty,
 	f = 'function';
 
 /**
- * Returns a function used to call superclass methods
+ * Returns a function used to call superclass methods:
  *  - saves old this._super value;
  *  - sets this._super as parent fn
  *  - calls the proto.name fn in the proper scope (this)
  *  - restores the old _super value
  */
 
-function setupSuperMethod(property, superclass, fn) {
+function addSuperMethod(property, superclass, fn) {
 	return function() {
 		var tmp = this._super;
 
@@ -55,31 +74,28 @@ function setupSuperMethod(property, superclass, fn) {
  */
 
 function extend(SuperClass, prototype) {
-	var members, superProto, NewClass, statics = false;
+	var constructor, name, member, superProto, NewClass, superProto = SuperClass.prototype,
+		Surrogate = function() {},
+		statics = false;
 
-	// if (SuperClass && SuperClass === Object) { SuperClass = Class; }
-	if (prototype) {
-		if (has.call(prototype, 'statics')) {
-			statics = prototype.statics;
-			prototype.statics = false;
-			delete prototype.statics;
-		}
+	if (has.call(prototype, 'statics')) {
+		statics = prototype.statics;
+		prototype.statics = null;
+		delete prototype.statics;
+	}
 
-		if (has.call(prototype, 'constructor')) {
-			NewClass = prototype.constructor;
-		}
+	if (has.call(prototype, 'constructor')) {
+		constructor = prototype.constructor;
 	} else {
-		prototype = {};
+		constructor = typeof superProto.constructor === f ? superProto.constructor : function() {};
 	}
 
-	if (!NewClass) {
-		NewClass = function() {
-			return this.constructor.apply(this, arguments);
-		};
-	}
+	// _super() on constructor
+	constructor = fnTest.test(constructor) ? addSuperMethod('constructor', superProto, constructor) : constructor;
 
-	// we use a dummy constructor to provide inheritance mechanism
-	var Surrogate = function() {};
+	NewClass = function() {
+		return constructor.apply(this, arguments);
+	};
 
 	// a reference to superclass.prototype will allow the 'instanceof' operator to work
 	// with all inherited superclasses of a instance
@@ -87,18 +103,17 @@ function extend(SuperClass, prototype) {
 	Surrogate.prototype.__initialize__ = false;
 	NewClass.prototype = new Surrogate();
 	NewClass.prototype.__initialize__ = true;
-	superProto = SuperClass.prototype;
 
-	var name, member;
 	for (name in prototype) {
 		// skip reserved keys
 		if (name === 'self' || name === 'superclass') continue;
+
 		member = prototype[name];
 
 		// Check if we're overwriting an existing function:
 		// if proto.name is function and superclass.name are both function
 		// and proto.name has a reference to _super(), we should:
-		NewClass.prototype[name] = (typeof member === f && typeof superProto[name] === f && fnTest.test(member)) ? setupSuperMethod(name, superProto, member) : member;
+		NewClass.prototype[name] = (typeof member === f && typeof superProto[name] === f && fnTest.test(member)) ? addSuperMethod(name, superProto, member) : member;
 	}
 
 	/**
@@ -113,13 +128,11 @@ function extend(SuperClass, prototype) {
 	/**
 	 * Copy static properties/methods to new class
 	 */
-	if (statics) {
-		copy(NewClass, statics);
-	}
+	addStatics(NewClass, SuperClass, statics);
 
 	NewClass.extend = function(prototype) {
 		return extend(this, prototype);
-	}
+	};
 
 	// this.superclass gives access to parent class
 	NewClass.superclass = NewClass.prototype.superclass = superProto;
@@ -128,23 +141,4 @@ function extend(SuperClass, prototype) {
 	NewClass.prototype.self = NewClass;
 
 	return NewClass;
-};
-
-exports.extend = function(a, b) {
-	var len = arguments.length,
-		result;
-
-	if (len === 1) {
-		if (typeof a === f) {
-			result = extend(a, {});
-		} else {
-			result = extend(function() {}, a);
-		}
-	} else if (len === 2) {
-		result = extend(a, (typeof b === 'object' && b) || {});
-	} else {
-		result = extend(function() {}, {});
-	}
-
-	return result;
-};
+}

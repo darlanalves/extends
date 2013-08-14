@@ -43,7 +43,7 @@ module.exports = function(grunt) {
 
 	var jasmine = {
 		latest: {
-			src: 'dist/' + libName + '-latest.js',
+			src: 'build/$assembled.js',
 			options: {
 				keepRunner: true,
 				outfile: './test.html',

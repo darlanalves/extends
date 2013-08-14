@@ -1,6 +1,18 @@
 describe('Extend - class extension', function() {
 	var DummyClass = function() {};
 
+	it("should not call constructor twice", function() {
+		var count = 0;
+
+		var Class = extend(function() {
+			count++;
+			if (count > 1) throw new Error();
+		});
+
+		var obj = new Class();
+		expect(count).toBe(1);
+	});
+
 	it("should create an empty class", function() {
 		var Class = extend();
 	});
@@ -12,7 +24,7 @@ describe('Extend - class extension', function() {
 		expect(typeof B).toBe('function');
 	});
 
-	it('should add static properties', function() {
+	it('should add static properties to a new class', function() {
 		var A = extend(DummyClass, {
 			statics: {
 				STATIC_ONE: 1
@@ -24,6 +36,26 @@ describe('Extend - class extension', function() {
 		expect(A.STATIC_ONE).toBeDefined();
 		expect(A.STATIC_ONE).toEqual(1);
 	});
+
+	it("should call super method on constructor", function() {
+		var parentCalled = false,
+			subCalled = false;
+
+		var BaseClass = extend(function() {
+			parentCalled = true;
+		});
+
+		var SubClass = extend(BaseClass, {
+			constructor: function() {
+				subCalled = true;
+				this._super();
+			}
+		});
+
+		var sub = new SubClass();
+		expect(parentCalled).toBe(true);
+		expect(subCalled).toBe(true);
+	 });
 
 	it("should call superclass method via this._super()", function() {
 		var SuperClass = extend(DummyClass, {
