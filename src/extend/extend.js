@@ -140,5 +140,7 @@ function extend(SuperClass, prototype) {
 	// this.self is a reference to proto
 	NewClass.prototype.self = NewClass;
 
+	NewClass.prototype.constructor = NewClass;
+
 	return NewClass;
 }

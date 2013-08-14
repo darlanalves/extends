@@ -13,6 +13,34 @@ describe('Extend - class extension', function() {
 		expect(count).toBe(1);
 	});
 
+	it("should setup the prototype chain properly and don't call constructor twice", function() {
+		var countA = 0, countB = 0;
+
+		var A = extend({
+			constructor: function() {
+				countA++;
+
+				if (countA > 1) throw Error();
+			}
+		});
+
+		var B = extend(A, {
+			constructor: function() {
+				countB++;
+
+				if (countB > 1) throw Error();
+			}
+		});
+
+		var a = new A();
+		var b = new B();
+
+		expect(countA).toBe(1);
+		expect(countB).toBe(1);
+		expect(b instanceof B).toBe(true);
+		expect(b instanceof A).toBe(true);
+	});
+
 	it("should create an empty class", function() {
 		var Class = extend();
 	});
