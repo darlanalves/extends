@@ -55,7 +55,7 @@ describe('Extend - class extension', function() {
 		var sub = new SubClass();
 		expect(parentCalled).toBe(true);
 		expect(subCalled).toBe(true);
-	 });
+	});
 
 	it("should call superclass method via this._super()", function() {
 		var SuperClass = extend(DummyClass, {
