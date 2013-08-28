@@ -4,16 +4,18 @@ describe('Extend - class extension', function() {
 	it("should not call constructor twice", function() {
 		var count = 0;
 
-		var Class = extend(function() {
-			count++;
-			if (count > 1) throw new Error();
+		var Class = extend({
+			constructor: function() {
+				count++;
+				if (count > 1) throw new Error();
+			}
 		});
 
 		var obj = new Class();
 		expect(count).toBe(1);
 	});
 
-	it("should setup the prototype chain properly and don't call constructor twice", function() {
+	it("should setup the prototype chain properly", function() {
 		var countA = 0, countB = 0;
 
 		var A = extend({
@@ -37,8 +39,12 @@ describe('Extend - class extension', function() {
 
 		expect(countA).toBe(1);
 		expect(countB).toBe(1);
+
 		expect(b instanceof B).toBe(true);
 		expect(b instanceof A).toBe(true);
+
+		expect(b.constructor === B).toBe(true);
+		expect(a.constructor === A).toBe(true);
 	});
 
 	it("should create an empty class", function() {
@@ -69,8 +75,10 @@ describe('Extend - class extension', function() {
 		var parentCalled = false,
 			subCalled = false;
 
-		var BaseClass = extend(function() {
-			parentCalled = true;
+		var BaseClass = extend({
+			constructor: function() {
+				parentCalled = true;
+			}
 		});
 
 		var SubClass = extend(BaseClass, {

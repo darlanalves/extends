@@ -69,6 +69,8 @@ function addSuperMethod(property, superclass, fn) {
 	};
 }
 
+var __initialize__ = true;
+
 /**
  * @method extend
  */
@@ -87,22 +89,27 @@ function extend(SuperClass, prototype) {
 	if (has.call(prototype, 'constructor')) {
 		constructor = prototype.constructor;
 	} else {
-		constructor = typeof superProto.constructor === f ? superProto.constructor : function() {};
+		//constructor = typeof superProto.constructor === f ? superProto.constructor : function constructor() {};
+		constructor = SuperClass;
 	}
 
 	// _super() on constructor
 	constructor = fnTest.test(constructor) ? addSuperMethod('constructor', superProto, constructor) : constructor;
 
-	NewClass = function() {
-		return constructor.apply(this, arguments);
-	};
+	// I'm using a special tricky variable to avoid useless class initialization on prototype setup
+	function NewClass() {
+		if (__initialize__) {
+			return constructor.apply(this, arguments);
+		}
+	}
 
 	// a reference to superclass.prototype will allow the 'instanceof' operator to work
 	// with all inherited superclasses of a instance
+
 	Surrogate.prototype = SuperClass.prototype;
-	Surrogate.prototype.__initialize__ = false;
+	__initialize__ = false;
 	NewClass.prototype = new Surrogate();
-	NewClass.prototype.__initialize__ = true;
+	__initialize__ = true;
 
 	for (name in prototype) {
 		// skip reserved keys
@@ -131,7 +138,7 @@ function extend(SuperClass, prototype) {
 	addStatics(NewClass, SuperClass, statics);
 
 	NewClass.extend = function(prototype) {
-		return extend(this, prototype);
+		return extend(this, prototype || {});
 	};
 
 	// this.superclass gives access to parent class
