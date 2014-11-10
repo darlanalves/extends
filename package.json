@@ -1,7 +1,7 @@
 {
 	"name": "extends",
 	"description": "extensible classes - supports super method",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"author": {
 		"name": "Darlan Alves",
 		"email": "darlan@moovia.com"

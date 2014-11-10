@@ -54,7 +54,7 @@ var has = {}.hasOwnProperty,
 
 function addSuperMethod(property, superclass, fn) {
 	return function() {
-		var tmp = this._super;
+		var tmp = '_super' in this && typeof this._super === 'function' ? this._super : null;
 
 		// Adds a new this._super() method that references the superclass
 		this._super = superclass[property];
@@ -63,7 +63,11 @@ function addSuperMethod(property, superclass, fn) {
 
 		// The method only needs to be bound temporarily, so we
 		// remove it when we're done executing
-		this._super = tmp;
+		if (tmp !== null) {
+			this._super = tmp;
+		} else {
+			delete this._super;
+		}
 
 		return ret;
 	};
